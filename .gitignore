@@ -74,6 +74,7 @@ Properties/launchSettings.json
 *.pidb
 *.svclog
 *.scc
+*.exe
 
 # Chutzpah Test files
 _Chutzpah*
@@ -88,6 +89,7 @@ ipch/
 *.cachefile
 *.VC.db
 *.VC.VC.opendb
+*.mdb
 
 # Visual Studio profiler
 *.psess
