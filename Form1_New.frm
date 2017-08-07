@@ -1,18 +1,18 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{67397AA1-7FB1-11D0-B148-00A0C922E820}#6.0#0"; "MSADODC.OCX"
 Object = "{648A5603-2C6E-101B-82B6-000000000014}#1.1#0"; "MSCOMM32.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00008000&
    ClientHeight    =   10350
    ClientLeft      =   60
    ClientTop       =   630
-   ClientWidth     =   19875
+   ClientWidth     =   21930
    LinkTopic       =   "Form1"
    ScaleHeight     =   10350
-   ScaleWidth      =   19875
+   ScaleWidth      =   21930
    StartUpPosition =   2  'CenterScreen
    WindowState     =   2  'Maximized
    Begin VB.TextBox Text4 
@@ -40,7 +40,7 @@ Begin VB.Form frmMain
          BeginProperty Font 
             Name            =   "Arial"
             Size            =   29.25
-            Charset         =   0
+            Charset         =   204
             Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
@@ -59,7 +59,7 @@ Begin VB.Form frmMain
          BeginProperty Font 
             Name            =   "Arial"
             Size            =   29.25
-            Charset         =   0
+            Charset         =   204
             Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
@@ -78,7 +78,7 @@ Begin VB.Form frmMain
          BeginProperty Font 
             Name            =   "Arial"
             Size            =   29.25
-            Charset         =   0
+            Charset         =   204
             Weight          =   700
             Underline       =   0   'False
             Italic          =   0   'False
@@ -174,9 +174,9 @@ Begin VB.Form frmMain
    Begin VB.Frame Frame9 
       Caption         =   "RCL dan ECG"
       Height          =   7575
-      Left            =   9000
+      Left            =   10440
       TabIndex        =   122
-      Top             =   1560
+      Top             =   1200
       Visible         =   0   'False
       Width           =   8655
       Begin VB.Frame Frame8 
@@ -1053,9 +1053,9 @@ Begin VB.Form frmMain
    Begin VB.Frame Frame14 
       Caption         =   "Laser Decision"
       Height          =   1695
-      Left            =   10440
+      Left            =   15360
       TabIndex        =   145
-      Top             =   6360
+      Top             =   7320
       Visible         =   0   'False
       Width           =   3495
       Begin VB.TextBox txtDecGanjil 
@@ -1376,7 +1376,7 @@ Begin VB.Form frmMain
       BackColor       =   -2147483633
       Appearance      =   1
       ShowWeekNumbers =   -1  'True
-      StartOfWeek     =   91160578
+      StartOfWeek     =   120455170
       CurrentDate     =   41127
    End
    Begin VB.Frame Frame2 
@@ -3117,8 +3117,8 @@ Dim laser, decision, countCom As Boolean
 
 
 
-Private Sub cmdStart_Click(Index As Integer)
-    Select Case Index
+Private Sub cmdStart_Click(index As Integer)
+    Select Case index
     Case 0
         holdread = True
         Call cmdTriggerECG_Click
@@ -3232,10 +3232,10 @@ End Sub
 
 
 Private Sub ECGInstrument_OnComm()
-    Dim AA, DD, FF As Integer
+    Dim Aa, DD, FF As Integer
     Dim AT, DT, FT As Integer
     Dim AE, DE, FE As Integer
-    Dim Result As String
+    Dim result As String
     
     'ECGInstrument.Output = "J"
     txtInputECG.Text = txtInputECG & ECGInstrument.Input
@@ -3276,19 +3276,26 @@ Sub OpenPortRCL_ECG()
 End Sub
 
 Private Sub cmdPos2_Click()
-Dim i, j As Integer
+Dim i, j, k As Integer
 
 i = Val(txtIDPost2.Text)
-If optGenapPos2.Value = True Then
+If optGenapPos2.value = True Then
+    k = i * 2 - 2
     txtR(i * 2 - 2).Text = txtMeasR.Text
     txtL(i * 2 - 2).Text = txtMeasL.Text
-ElseIf optGanjilPos2.Value = True Then
+ElseIf optGanjilPos2.value = True Then
+    k = i * 2 - 1
     txtR(i * 2 - 1).Text = txtMeasR.Text
     txtL(i * 2 - 1).Text = txtMeasL.Text
 End If
 
+ '''''
+    Inifile.SaveValue "TXTR", k, txtR(k).Text
+    Inifile.SaveValue "TXTL", k, txtL(k).Text
+    Inifile.SaveValue "SHPRCL", k, shpRCL(k).BackColor
+ '''''
 
-'''update shape RCL cavity
+''''update shape RCL cavity
 For j = 0 To 15
     If Val(txtR(j).Text) < Val(txtSpecRmin.Text) Or Val(txtR(j).Text) > Val(txtSpecRmax.Text) Then
         shpRCL(j).BackColor = vbRed
@@ -3297,6 +3304,7 @@ For j = 0 To 15
     Else
         shpRCL(j).BackColor = vbGreen
     End If
+    
 Next j
 
 
@@ -3326,7 +3334,7 @@ Private Sub cmdPos3_Click()
     Dim j As Integer
     Dim A, D, F As String
     Dim CavityName As Integer
-    Dim Result As String
+    Dim result As String
     Dim strRCL As String
     Dim strECG As String
     Dim strResult As String
@@ -3335,7 +3343,7 @@ Private Sub cmdPos3_Click()
     Q = Val(txtIDPost3.Text)
     
     '1
-    If optGenapPos3.Value = True Then
+    If optGenapPos3.value = True Then
         txtA(Q * 2 - 2).Text = txtMeasA.Text
         txtD(Q * 2 - 2).Text = txtMeasD.Text
         txtF(Q * 2 - 2).Text = txtMeasF.Text
@@ -3343,7 +3351,7 @@ Private Sub cmdPos3_Click()
         DatatxtL = txtL(Q * 2 - 2).Text
         CavityName = 1
     '2
-    ElseIf optGanjilPos3.Value = True Then
+    ElseIf optGanjilPos3.value = True Then
         txtA(Q * 2 - 1).Text = txtMeasA.Text
         txtD(Q * 2 - 1).Text = txtMeasD.Text
         txtF(Q * 2 - 1).Text = txtMeasF.Text
@@ -3432,7 +3440,8 @@ Private Sub cmdPos3_Click()
         Else
             strResult = "FAIL"
         End If
-
+''''
+     i = i + 1
     End If
     
     
@@ -3442,6 +3451,18 @@ Private Sub cmdPos3_Click()
 '    Do Until Modbuswait = False
 '        DoEvents
 '    Loop
+    '''''
+    
+    ''''Save RCL ECGtext to Ini
+    Inifile.SaveValue "TXTR", i, txtR(i).Text
+    Inifile.SaveValue "TXTL", i, txtL(i).Text
+    Inifile.SaveValue "SHPRCL", i, shpRCL(i).BackColor
+      
+    Inifile.SaveValue "TXTA", i, txtA(i).Text
+    Inifile.SaveValue "TXTD", i, txtD(i).Text
+    Inifile.SaveValue "TXTF", i, txtF(i).Text
+    Inifile.SaveValue "SHPECG", i, shpECG(i).BackColor
+    ''''
     
     Call SaveDatalog(Q, CavityName, strRCL, strECG, strResult)
     'List1.AddItem ("TEST")
@@ -3459,7 +3480,41 @@ Private Sub Form_Load()
     FirstInisial
 End Sub
 
-
+Sub ReloadMatchLastRunning(ByVal LastRunning As String)
+Dim iniLastRunning As String
+Dim i, color As Long
+LastRunning = UCase(LastRunning)
+   If LastRunning = "" Then
+      Exit Sub
+   End If
+    iniLastRunning = UCase(Inifile.GetLastRunning)
+    If iniLastRunning = LastRunning Then
+      For i = 0 To 15
+            txtR(i).Text = Inifile.GetValue("TXTR", i)
+            txtL(i).Text = Inifile.GetValue("TXTL", i)
+            txtA(i).Text = Inifile.GetValue("TXTA", i)
+            txtD(i).Text = Inifile.GetValue("TXTD", i)
+            txtF(i).Text = Inifile.GetValue("TXTF", i)
+            color = Inifile.GetValue("SHPRCL", i)
+            shpRCL(i).BackColor = color
+            color = Inifile.GetValue("SHPECG", i)
+            shpECG(i).BackColor = color
+            
+       Next
+    Else
+        For i = 0 To 15
+                Inifile.SaveValue "TXTR", i, ""
+                Inifile.SaveValue "TXTL", i, ""
+                Inifile.SaveValue "TXTA", i, ""
+                Inifile.SaveValue "TXTD", i, ""
+                Inifile.SaveValue "TXTF", i, ""
+                Inifile.SaveValue "SHPECG", i, &H8000&
+                Inifile.SaveValue "SHPRCL", i, &H8000&
+           Next
+        
+    End If
+    Inifile.SaveLastRunning Trim(LastRunning)
+End Sub
 Sub FirstInisial()
 Dim i As Integer
 countCom = False
@@ -3511,7 +3566,6 @@ lblCavity.Caption = "-"
     Call ClearshpRCL_ECG
 
 End Sub
-
 Sub ClearshpRCL_ECG()
     Dim Clrshape As Integer
     For Clrshape = 0 To 15
@@ -3519,17 +3573,57 @@ Sub ClearshpRCL_ECG()
         shpECG(Clrshape).BackColor = &H8000&
     Next
 End Sub
+Sub ClearAll()
+Dim i As Integer
+countCom = False
+Dim ClearAll As Integer
 
+For ClearAll = 0 To 15
+    txtR(ClearAll).Text = ""
+    txtL(ClearAll).Text = ""
+    txtA(ClearAll).Text = ""
+    txtD(ClearAll).Text = ""
+    txtF(ClearAll).Text = ""
+Next
+
+txtSpecRmin.Text = ""
+txtSpecRnom.Text = ""
+txtSpecRmax.Text = ""
+txtSpecA.Text = ""
+txtSpecD.Text = ""
+txtSpecF.Text = ""
+lblCavity.Caption = "-"
+
+    ind = False
+    
+    cycle = 0
+    cav = Val(0)
+    cav1 = Val(0)
+    
+    For i = 0 To 4
+        txtLaser1(i) = ""
+        txtLaser2(i) = ""
+        txtLaserTemplate(i) = ""
+    Next i
+    
+    
+    holdread = True
+    DebugMode = False
+    ECGtriger = False
+    stsDelay = True
+    Call ClearshpRCL_ECG
+
+End Sub
 
 Sub waktu()
-MonthView1.Value = Now()
+MonthView1.value = Now()
 
 txtWeek.Text = "8B" & Right((MonthView1.Year), 2) & Format(MonthView1.Week, "00") & (Val(MonthView1.DayOfWeek) - 1) & "3"
 
 '8B120922 - 8B(fix) + 12(var, 2012) + 09(var, week 9) + 2 (var, hari ke 2) + 2(fix,tester 2)
 End Sub
 
-Sub connect_database()
+Sub connect_database(ByRef refer)
 Dim DBHis
 Dim i As Integer
 Dim rs As ADODB.Recordset
@@ -3541,7 +3635,7 @@ If (txtRef.Text <> "") Then
     DBHis.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + App.Path + "\db_tes.mdb;Persist Security Info=False"
     DBHis.Open
     Set rs = New ADODB.Recordset
-    rs.Open "SELECT * from coilref where PrintCoil like '" + txtRef.Text + "%'", DBHis, adOpenKeyset, adLockOptimistic
+    rs.Open "SELECT * from coilref where PrintCoil like '" + refer + "%'", DBHis, adOpenKeyset, adLockOptimistic
     With rs
     'rs.MoveFirst
     If .EOF = True Then
@@ -3549,6 +3643,7 @@ If (txtRef.Text <> "") Then
         .Close
         MsgBox "Database not exist", vbOKOnly + vbExclamation, "Warning"
         txtRef.SetFocus
+        refer = ""
         Exit Sub
     Else
         While (.EOF = False)
@@ -3629,13 +3724,13 @@ Private Sub mExit_Click()
 End Sub
 
 Private Sub RCLInstrument_OnComm()
-Dim Result As String
+Dim result As String
 
 
 If Val(Text2.Text) = 1 Then
     txtInputRCL.Text = txtInputRCL.Text + RCLInstrument.Input
-    Result = txtInputRCL.Text
-    Debug.Print Result
+    result = txtInputRCL.Text
+    Debug.Print result
     p = InStr(txtInputRCL.Text, "R")
     Q = InStr(txtInputRCL.Text, "L")
     
@@ -3672,24 +3767,24 @@ End Sub
 Private Sub tmrCylPost2_Timer()
     
     If Val(Form1.Text4(10).Text) = 1 Then
-        optGenapPos2.Value = True
+        optGenapPos2.value = True
     ElseIf Val(Form1.Text4(11).Text) = 1 Then
-        optGanjilPos2.Value = True
+        optGanjilPos2.value = True
     Else
-        optGanjilPos2.Value = False
-        optGenapPos2.Value = False
+        optGanjilPos2.value = False
+        optGenapPos2.value = False
     End If
 
 End Sub
 
 Private Sub tmrCylPost3_Timer()
     If Val(Form1.Text4(20).Text) = 1 Then
-    optGenapPos3.Value = True
+    optGenapPos3.value = True
     ElseIf Val(Form1.Text4(21).Text) = 1 Then
-    optGanjilPos3.Value = True
+    optGanjilPos3.value = True
     Else
-    optGanjilPos3.Value = False
-    optGenapPos3.Value = False
+    optGanjilPos3.value = False
+    optGenapPos3.value = False
     End If
 End Sub
 
@@ -3973,7 +4068,7 @@ Private Sub TxtLaserID_Change()
     'Cavity1
     If shpRCL(i).BackColor = vbGreen And shpECG(i).BackColor = vbGreen Then
         'Pass
-        Call connect_database
+        Call connect_database(txtRef.Text)
         txtLaserTemplate(4).Text = txtWeek.Text
         txtLaser1(4).Text = txtWeek.Text
         For idx = 0 To 3
@@ -4007,7 +4102,7 @@ Private Sub TxtLaserID_Change()
     'Cavity2
     If shpRCL(i + 1).BackColor = vbGreen And shpECG(i + 1).BackColor = vbGreen Then
         'LOAD db TO REFRESH
-        Call connect_database
+        Call connect_database(txtRef.Text)
         txtLaserTemplate(4).Text = txtWeek.Text
         txtLaser2(4).Text = txtWeek.Text
         For idx = 0 To 3
@@ -4101,19 +4196,39 @@ End Sub
 
 Private Sub txtRef_Change()
 Dim i As Integer
+Dim Aa As String
 
 refer = UCase(txtRef.Text)
+''''{
+If (Len(refer) <> 2) Then
+        ClearAll
+        Exit Sub
+End If
+ ''''}
 
 txtECGRef.Text = "B" & "," & refer
 If refer <> "" Then
-    ECGInstrument.Output = Trim(txtECGRef.Text) & vbCrLf
-    ECGInstrument.Output = "U" & vbCrLf
+   ECGInstrument.Output = Trim(txtECGRef.Text) & vbCrLf
+   ECGInstrument.Output = "U" & vbCrLf
 End If
 
 
-
-Call connect_database
+Call connect_database(refer)
 Call waktu
+If (refer = "") Then
+    ClearAll
+    txtRef.Text = refer
+    Exit Sub
+End If
+
+
+Aa = MsgBox("Yakin ganti Reference?", vbYesNo, "Question")
+If Aa = vbNo Then
+    txtRef.Text = ""
+    ClearAll
+    Exit Sub
+End If
+
 
 txtLaserTemplate(4).Text = txtWeek.Text
 txtLaser1(4).Text = txtWeek.Text
@@ -4134,11 +4249,13 @@ txtLaser2(4).Text = txtWeek.Text
         cmdStart(0).Enabled = False
     End If
     
+    ''''
+    ReloadMatchLastRunning (refer)
+    ''''
     Call Update_Datalog_Laser 'Send Data To PC Laser
     Call cmdUpdatetxtPcLaser_Click
     
     Timer4.Enabled = True '140313
-
     '/////
 End Sub
 
@@ -4157,6 +4274,7 @@ End Sub
                 tmrIndikator.Enabled = True
             End If
         End Sub
+
         Private Sub Winsock1_DataArrival(ByVal datalength As Long)
             DataArrival (datalength)
         End Sub

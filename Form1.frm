@@ -3,15 +3,15 @@ Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form Form1 
    BackColor       =   &H00008000&
    Caption         =   "                                                                                                                          "
-   ClientHeight    =   4080
+   ClientHeight    =   8325
    ClientLeft      =   165
    ClientTop       =   555
-   ClientWidth     =   4965
+   ClientWidth     =   15195
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4080
-   ScaleWidth      =   4965
+   ScaleHeight     =   8325
+   ScaleWidth      =   15195
    StartUpPosition =   2  'CenterScreen
    Begin VB.Timer Timer7 
       Interval        =   500
